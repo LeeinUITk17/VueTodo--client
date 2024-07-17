@@ -9,7 +9,8 @@
       "24": "./icons/skull24.png",
       "64": "./icons/skull64.png",
       "128": "./icons/skull128.png"
-    }
+    },
+     "default_title": "Click here!"
   },
   "background": {
     "service_worker": "src/background.js"
@@ -17,7 +18,9 @@
   "permissions": [
     "storage",
     "tabs",
-    "activeTab"
+    "activeTab",
+    "webNavigation"
+    
   ],
   "content_scripts": [
     {
