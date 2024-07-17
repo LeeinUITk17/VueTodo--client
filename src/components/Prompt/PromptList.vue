@@ -48,8 +48,10 @@ export default defineComponent({
           (item: { name: any; language: any; description: any }) => ({
             name: item.name,
             description: item.description,
-            text: `${item.name},${item.language} about {{keyword}}.`,
-            fields: [{ name: 'keyword', label: 'Keyword', placeholder: 'Enter your keyword' }]
+            text: `${item.name},${item.language} about {{keyword}} with language is {{language}}.`,
+            fields: [{ name: 'keyword', label: 'Keyword', placeholder: 'Enter your keyword' },
+            { name: 'language', label: 'Language', placeholder: 'Select language', options: ['English', 'Vietnamese', 'Japanese'] }
+            ]
           })
         )
       } catch (error) {

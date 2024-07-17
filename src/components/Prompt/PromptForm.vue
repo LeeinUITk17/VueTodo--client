@@ -4,7 +4,10 @@
     <form @submit.prevent="handleSubmit" class="prompt-form">
       <div v-for="(field, index) in template.fields" :key="index" class="form-field">
         <label :for="field.name">{{ field.label }}</label>
-        <input :id="field.name" v-model="formData[field.name]" :placeholder="field.placeholder" />
+        <input v-if="!field.options" :id="field.name" v-model="formData[field.name]" :placeholder="field.placeholder" />
+        <select v-else :id="field.name" v-model="formData[field.name]">
+          <option v-for="option in field.options" :key="option" :value="option">{{ option }}</option>
+        </select>
       </div>
       <button type="submit">Generate Prompt</button>
     </form>
@@ -22,6 +25,7 @@ interface Field {
   name: string
   label: string
   placeholder: string
+  options?: string[] 
 }
 
 interface Template {
@@ -77,7 +81,7 @@ label {
   font-size: 0.9rem;
 }
 
-input {
+input, select {
   width: 100%;
   padding: 10px;
   border: 1px solid #5c5c5c;

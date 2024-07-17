@@ -14,7 +14,6 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@types/chrome": "^0.0.268",
     "axios": "^1.7.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
@@ -25,6 +24,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
+    "@types/chrome": "^0.0.268",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20.14.5",
     "@vitejs/plugin-vue": "^5.0.5",
