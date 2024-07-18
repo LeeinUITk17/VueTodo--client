@@ -19,18 +19,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+import { defineComponent, type PropType } from 'vue';
 
 interface Field {
-  name: string
-  label: string
-  placeholder: string
-  options?: string[] 
+  name: string;
+  label: string;
+  placeholder: string;
+  options?: string[];
 }
 
 interface Template {
-  text: string
-  fields: Field[]
+  text: string;
+  fields: Field[];
 }
 
 export default defineComponent({
@@ -44,17 +44,36 @@ export default defineComponent({
     return {
       formData: {} as { [key: string]: string },
       generatedPrompt: ''
-    }
+    };
   },
   methods: {
     handleSubmit() {
-      this.generatedPrompt = this.template.text
+      this.generatedPrompt = this.template.text;
       for (const key in this.formData) {
-        this.generatedPrompt = this.generatedPrompt.replace(`{{${key}}}`, this.formData[key])
+        this.generatedPrompt = this.generatedPrompt.replace(`{{${key}}}`, this.formData[key]);
       }
+      chrome.tabs.create({ url: 'https://chat.openai.com' }, (tab) => {
+        chrome.tabs.onUpdated.addListener(function listener(this: any, tabId, info) {
+          if (info.status === 'complete' && tabId === tab.id) {
+            chrome.tabs.onUpdated.removeListener(listener);
+            chrome.scripting.executeScript({
+              target: { tabId: tab.id as number },
+              func: (prompt) => {
+                const textarea = document.querySelector('textarea');
+                if (textarea) {
+                  textarea.value = prompt;
+                  const inputEvent = new Event('input', { bubbles: true });
+                  textarea.dispatchEvent(inputEvent);
+                }
+              },
+              args: [this.generatedPrompt]
+            });
+          }
+        });
+      });
     }
   }
-})
+});
 </script>
 
 <style scoped>
