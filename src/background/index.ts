@@ -23,6 +23,12 @@ browser.runtime.onInstalled.addListener(() => {
   });
 }); 
 
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id as number },
+    files: ['content.js']
+  });
+});
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'fillPrompt') {

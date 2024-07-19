@@ -14,6 +14,7 @@
     <div v-if="generatedPrompt" class="generated-prompt">
       <h3>Generated Prompt</h3>
       <p>{{ generatedPrompt }}</p>
+      <button @click="generateAndSend" type="button">Send to ChatGPT</button>
     </div>
   </div>
 </template>
@@ -52,12 +53,14 @@ export default defineComponent({
       for (const key in this.formData) {
         this.generatedPrompt = this.generatedPrompt.replace(`{{${key}}}`, this.formData[key]);
       }
+     
+    },
+    generateAndSend() {
       chrome.tabs.create({ url: 'https://chat.openai.com' }, (tab) => {
-        chrome.tabs.onUpdated.addListener(function listener(this: any, tabId, info) {
+        chrome.tabs.onUpdated.addListener((tabId, info) => {
           if (info.status === 'complete' && tabId === tab.id) {
-            chrome.tabs.onUpdated.removeListener(listener);
             chrome.scripting.executeScript({
-              target: { tabId: tab.id as number },
+              target: { tabId: tab.id },
               func: (prompt) => {
                 const textarea = document.querySelector('textarea');
                 if (textarea) {
@@ -74,6 +77,8 @@ export default defineComponent({
     }
   }
 });
+
+
 </script>
 
 <style scoped>

@@ -10,7 +10,7 @@
       "64": "./icons/skull64.png",
       "128": "./icons/skull128.png"
     },
-     "default_title": "Click here!"
+    "default_title": "Click here!"
   },
   "background": {
     "service_worker": "src/background.js"
@@ -22,9 +22,13 @@
     "webNavigation",
     "scripting"
   ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "https://chatgpt.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>","https://chat.openai.com/*"],
+      "matches": [ "https://chatgpt.com/*"],
       "js": ["src/content.js"]
     }
   ]
