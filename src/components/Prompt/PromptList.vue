@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" type="module">
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
 import PromptForm from './PromptForm.vue'

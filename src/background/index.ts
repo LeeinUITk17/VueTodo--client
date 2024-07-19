@@ -46,4 +46,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
   }
 });
+const STORAGEKEYS = "Prompt";
+
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "savePrompt") {
+    chrome.storage.local.set({
+      [STORAGEKEYS]: request.data
+    }, () => {
+      console.log("Prompt saved", request.data);
+      sendResponse({ status: "success" });
+    });
+    return true; 
+  } else if (request.action === "getPrompts") {
+    chrome.storage.local.get([STORAGEKEYS], (result) => {
+      console.log("Prompt fetched", result[STORAGEKEYS]);
+      sendResponse(result[STORAGEKEYS] || []);
+    });
+    return true; 
+  }
+});
+
+
 
