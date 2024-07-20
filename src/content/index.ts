@@ -7,6 +7,10 @@ interface Prompts {
     createdAt: string;
     updatedAt: string;
   }
+  interface User {
+    email: string;
+    id: string;
+  }
   
   const STORAGEKEYS = "Prompt";
 
@@ -27,6 +31,14 @@ interface Prompts {
   async function getManager(): Promise<Prompts[]> {
     return new Promise<Prompts[]>((resolve) => {
       chrome.runtime.sendMessage({ action: "getPrompts" }, (response) => {
+        resolve(response);
+      });
+    });
+  }
+  
+  async function getManagerUser(): Promise<User> {
+    return new Promise<User>((resolve) => {
+      chrome.runtime.sendMessage({ action: "getuser" }, (response) => {
         resolve(response);
       });
     });
@@ -117,3 +129,13 @@ interface Prompts {
 }
 
 addOverlay();
+
+// async function checkUserAuthenticated() {
+//     const user = await getManagerUser();
+//     if (user) {
+//       addOverlay();
+//     }
+//   }
+
+//   checkUserAuthenticated();
+

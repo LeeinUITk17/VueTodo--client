@@ -47,7 +47,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 const STORAGEKEYS = "Prompt";
-
+const USERKEYS="user";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "savePrompt") {
@@ -66,6 +66,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true; 
   }
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+   if (request.action === "getuser") {
+    chrome.storage.local.get([USERKEYS], (result) => {
+      console.log("user background fetched", result[USERKEYS]);
+      sendResponse(result[USERKEYS] || []);
+    });
+    return true; 
+  }
+});
+
 
 
 
