@@ -4,5 +4,8 @@ export const store = reactive({
   isAuthenticated: false,
   setAuthenticated(status: boolean) {
     this.isAuthenticated = status;
+  },
+resetAuthenticated() {
+    this.isAuthenticated = false;
   }
 });

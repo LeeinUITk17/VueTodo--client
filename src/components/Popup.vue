@@ -10,6 +10,7 @@
         <nav v-if="store.isAuthenticated">
           <RouterLink to="/prompt"><button>PromptGPT</button></RouterLink>
           <RouterLink to="/todo"><button>Todo</button></RouterLink>
+          <button @click="logout">Logout</button>
         </nav>
       </div>
     </header>
@@ -21,12 +22,21 @@
 <script lang="ts">
 import { store } from '@/stores';
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 
 
 export default defineComponent({
   name: 'Popup',
   setup() {
-    return { store };
+    const router = useRouter();
+    const logout = () => {
+      chrome.storage.local.remove('user', () => {
+        console.log('User data removed.');
+        store.resetAuthenticated(); 
+        router.push({ name: 'login' }); 
+      });
+    };
+    return { store, logout };
   },
 });
 </script>
