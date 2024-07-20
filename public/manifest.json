@@ -20,7 +20,8 @@
     "tabs",
     "activeTab",
     "webNavigation",
-    "scripting"
+    "scripting",
+    "identity"
   ],
   "oauth2": {
     "client_id": "208940111876-v7gociqk9vsa1qru5c17lvbti6rdtdek.apps.googleusercontent.com",

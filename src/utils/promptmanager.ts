@@ -9,7 +9,10 @@ interface Prompts {
 }
 
 const STORAGEKEYS="Prompt";
-export async function  saveManager(Prompt:Prompts){
+import axios from 'axios';
+
+
+export async function  saveManagerPs(Prompt:Prompts){
   try{
     await chrome.storage.local.set({[
         STORAGEKEYS
@@ -31,3 +34,15 @@ export async function getManager(){
     console.log(err);
   }
 }
+
+export async function fetchAndSavePrompt() {
+  try {
+    const response = await axios.get('http://localhost:8000/prompt');
+    await saveManagerPs(response.data);
+    console.log("Data fetched and saved successfully");
+  } catch (err) {
+    console.error("Error fetching or saving data:", err);
+  }
+}
+
+fetchAndSavePrompt();

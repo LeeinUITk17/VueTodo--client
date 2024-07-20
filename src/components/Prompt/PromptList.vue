@@ -19,6 +19,7 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
 import PromptForm from './PromptForm.vue'
+import { saveManagerPs } from '@/utils/promptmanager'
 
 interface Field {
   name: string
@@ -44,6 +45,7 @@ export default defineComponent({
     const fetchTemplates = async () => {
       try {
         const response = await axios.get('http://localhost:8000/prompt')
+       await saveManagerPs(response.data)
         templates.value = response.data.map(
           (item: { name: any; language: any; description: any }) => ({
             name: item.name,

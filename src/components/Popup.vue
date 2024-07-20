@@ -1,12 +1,15 @@
 <template>
+  
   <div id="popup">
     <header>
       <img alt="Vue logo" class="logo" src="@/assets/skull.png" width="125" height="125" />
       <div class="wrapper">
-        <nav>
+        <nav v-if="!store.isAuthenticated">
+          <RouterLink to="/"><button>Login</button></RouterLink>       
+        </nav>
+        <nav v-if="store.isAuthenticated">
+          <RouterLink to="/prompt"><button>PromptGPT</button></RouterLink>
           <RouterLink to="/todo"><button>Todo</button></RouterLink>
-          <RouterLink to="/"><button>Home</button></RouterLink>
-          <RouterLink to="/prompt" ><button>PromptGPT</button></RouterLink>
         </nav>
       </div>
     </header>
@@ -14,6 +17,19 @@
     <RouterView />
   </div>
 </template>
+
+<script lang="ts">
+import { store } from '@/stores';
+import { defineComponent } from 'vue';
+
+
+export default defineComponent({
+  name: 'Popup',
+  setup() {
+    return { store };
+  },
+});
+</script>
 
 <style>
 #popup {
@@ -24,6 +40,7 @@
   color: #2c3e50;
   margin-top: 60px;
 }
+
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;
@@ -32,9 +49,11 @@
     flex-direction: column;
   }
 }
+
 .user {
   margin-top: 20px;
 }
+
 button {
   padding: 10px 20px;
   border: 2px solid #f0f0f0;
