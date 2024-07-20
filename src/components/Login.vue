@@ -9,6 +9,7 @@
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { store } from '@/stores'; 
+import { saveManagerUser } from '@/utils/promptmanager';
 
 export default defineComponent({
   name: 'PopupLogin',
@@ -27,6 +28,7 @@ export default defineComponent({
         chrome.identity.launchWebAuthFlow({ url, interactive: true }, async (redirectUrl) => {
           if (chrome.runtime.lastError || (redirectUrl && redirectUrl.includes('error'))) {
             console.error('Authentication failed:', chrome.runtime.lastError);
+            alert('Authentication failed. Please try again.');
             return;
           }
 
@@ -35,14 +37,22 @@ export default defineComponent({
 
           if (token) {
             const response = await fetch(`http://localhost:8000/auth/google?token=${token}`);
+            if (!response.ok) {
+          const errorData = await response.json();
+            console.error('Login failed:', errorData.message);
+           alert(`Login failed: ${errorData.message}. Please try again.`);
+                 return;
+              }
             const user = await response.json();
             console.log('Authenticated user:', user);
-
-            chrome.storage.local.set({ user }, () => {
-              console.log('User data saved.');
-              store.setAuthenticated(true);
-              router.push({ name: 'home' }); 
-            });
+            saveManagerUser(user);
+            store.setAuthenticated(true);
+            router.push({ name: 'home' });
+            // chrome.storage.local.set({ user }, () => {
+            //   console.log('User data saved.');
+            //   store.setAuthenticated(true);
+            //   router.push({ name: 'home' }); 
+            // });
           }
         });
       } catch (error) {
