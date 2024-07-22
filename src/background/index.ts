@@ -26,26 +26,38 @@ browser.runtime.onInstalled.addListener(() => {
 chrome.action.onClicked.addListener((tab) => {
   chrome.scripting.executeScript({
     target: { tabId: tab.id as number },
-    files: ['content.js']
+    files: ['src/content.js']
   });
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('Background script received message:', message);
   if (message.action === 'fillPrompt') {
-    chrome.scripting.executeScript({
-      target: { tabId: sender.tab?.id as number },
-      func: (prompt) => {
-        const textarea = document.querySelector('textarea');
-        if (textarea) {
-          textarea.value = prompt;
-          const inputEvent = new Event('input', { bubbles: true });
-          textarea.dispatchEvent(inputEvent);
-        }
-      },
-      args: [message.prompt]
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs.length > 0 && tabs[0].id) {
+        console.log('Found active tab:', tabs[0]);
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id },
+          func: (prompt) => {
+            console.log('Executing script in content script with prompt:', prompt);
+            const textarea = document.querySelector('textarea');
+            if (textarea) {
+              textarea.value = prompt;
+              const inputEvent = new Event('input', { bubbles: true });
+              textarea.dispatchEvent(inputEvent);
+            }
+          },
+          args: [message.prompt]
+        });
+      } else {
+        console.error('No active tab found');
+      }
     });
+  } else {
+    console.error('Unknown action:', message.action);
   }
 });
+
 const STORAGEKEYS = "Prompt";
 const USERKEYS="user";
 

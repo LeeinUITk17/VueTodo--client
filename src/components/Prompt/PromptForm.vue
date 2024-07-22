@@ -56,23 +56,12 @@ export default defineComponent({
      
     },
     generateAndSend() {
-      chrome.tabs.create({ url: 'https://chat.openai.com' }, (tab) => {
-        chrome.tabs.onUpdated.addListener((tabId, info) => {
-          if (info.status === 'complete' && tabId === tab.id) {
-            chrome.scripting.executeScript({
-              target: { tabId: tab.id },
-              func: (prompt) => {
-                const textarea = document.querySelector('textarea');
-                if (textarea) {
-                  textarea.value = prompt;
-                  const inputEvent = new Event('input', { bubbles: true });
-                  textarea.dispatchEvent(inputEvent);
-                }
-              },
-              args: [this.generatedPrompt]
-            });
-          }
-        });
+      console.log('Sending message from Vue component:', this.generatedPrompt);
+      chrome.runtime.sendMessage({
+        action: "fillPrompt",
+        prompt: this.generatedPrompt
+      }, (response) => {
+        console.log('Background script responded with:', response);
       });
     }
   }

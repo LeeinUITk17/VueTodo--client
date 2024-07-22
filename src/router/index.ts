@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue';
 import TodoPopup from '../components/TodoPopup.vue';
 import PromptHome from '../components/Prompt/PromptHome.vue';
 import Login from '@/components/Login.vue';
+import PromptPost from '../components/Prompt/PromptPost.vue';
 import { store } from '@/stores';
 
 const router = createRouter({
@@ -28,6 +29,10 @@ const router = createRouter({
       name: 'login',
       component: Login,
     },
+    {
+      path: '/post',
+      component: PromptPost,
+    }
   ],
 });
 

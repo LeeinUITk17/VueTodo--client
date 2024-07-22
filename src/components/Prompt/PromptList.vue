@@ -12,6 +12,8 @@
       </li>
     </ul>
     <PromptForm v-if="selectedTemplate" :template="selectedTemplate" />
+    <!-- <button @click="showPromptPost = true">Create Prompt</button>
+    <PromptPost v-if="showPromptPost" /> -->
   </div>
 </template>
 
@@ -20,6 +22,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
 import PromptForm from './PromptForm.vue'
 import { saveManagerPs } from '@/utils/promptmanager'
+// import PromptPost from './PromptPost.vue'
 
 interface Field {
   name: string

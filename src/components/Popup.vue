@@ -10,6 +10,7 @@
         <nav v-if="store.isAuthenticated">
           <RouterLink to="/prompt"><button>PromptGPT</button></RouterLink>
           <RouterLink to="/todo"><button>Todo</button></RouterLink>
+          <RouterLink to="/post"><button>Create Prompt</button></RouterLink>
           <button @click="logout">Logout</button>
         </nav>
       </div>
@@ -47,7 +48,7 @@ export default defineComponent({
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #f0f0f0;
   margin-top: 60px;
 }
 

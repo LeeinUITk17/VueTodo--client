@@ -14,6 +14,22 @@ interface Prompts {
   
   const STORAGEKEYS = "Prompt";
 
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log('Content script received message:', message);
+    if (message.action === 'fillPrompt') {
+      const textarea = document.querySelector('textarea');
+      if (textarea) {
+        console.log('Found textarea, updating with prompt:', message.prompt);
+        textarea.value = message.prompt;
+        const inputEvent = new Event('input', { bubbles: true });
+        textarea.dispatchEvent(inputEvent);
+      } else {
+        console.error('Textarea not found');
+      }
+    } else {
+      console.error('Unknown action:', message.action);
+    }
+  });
 
   
   async function saveManager(prompt: Prompts) {
@@ -94,12 +110,12 @@ interface Prompts {
         promptButton.style.display = 'block';
       });
 
-      const description = document.createElement('p');
-      description.innerText = prompt.description;
-      description.style.color = '#e0e0e0';
-      description.style.margin = '0';
+      const name = document.createElement('p');
+      name.innerText = prompt.name;
+      name.style.color = '#e0e0e0';
+      name.style.margin = '0';
 
-      promptBox.appendChild(description);
+      promptBox.appendChild(name);
       promptContainer.appendChild(promptBox);
     });
   } catch (error) {
